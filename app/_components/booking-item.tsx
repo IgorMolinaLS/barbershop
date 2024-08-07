@@ -21,7 +21,7 @@ const BookingItem = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center border-l border-solid border-secondary px-9">
+        <div className="flex flex-col items-center justify-center border-l-2 border-solid border-secondary px-9">
           <p className="text-sm">Mês</p>
           <p className="text-2xl">Dia</p>
           <p className="text-sm">Horário</p>
