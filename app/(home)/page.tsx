@@ -7,7 +7,7 @@ import BarbershopItem from "./_components/barbershop-item";
 import { db } from "../_lib/prisma";
 import Image from "next/image";
 import { Button } from "../_components/ui/button";
-import { quickSearchOptions } from "../constants/quick-search";
+import { quickSearchOptions } from "../_constants/quick-search";
 
 export default async function Home() {
   const barbershops = await db.barbershop.findMany({});
