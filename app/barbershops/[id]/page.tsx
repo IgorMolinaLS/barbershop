@@ -4,13 +4,7 @@ import Sidebar from "@/app/_components/sidebar";
 import { Button } from "@/app/_components/ui/button";
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet";
 import { db } from "@/app/_lib/prisma";
-import {
-  ChevronLeftIcon,
-  MapPinIcon,
-  MenuIcon,
-  SmartphoneIcon,
-  Star,
-} from "lucide-react";
+import { ChevronLeftIcon, MapPinIcon, MenuIcon, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -102,7 +96,11 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
           Serviços
         </h2>
         {barbershop.services.map((service) => (
-          <ServiceItem key={service.id} service={service}></ServiceItem>
+          <ServiceItem
+            barbershop={barbershop}
+            key={service.id}
+            service={service}
+          ></ServiceItem>
         ))}
       </div>
 
