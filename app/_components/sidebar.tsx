@@ -1,24 +1,18 @@
 "use client";
 import { Calendar, HomeIcon, LogInIcon, LogOutIcon } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { quickSearchOptions } from "../_constants/quick-search";
-import { Button } from "./ui/button";
-import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import { signIn, signOut, useSession } from "next-auth/react";
+import SignInDialog from "./signin-dialog";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 
 const Sidebar = () => {
   const { data } = useSession();
-  const handleLoginWithGoogleClick = () => signIn("google");
+
   const handleLogoutWithGoogleClick = () => signOut();
 
   return (
@@ -48,25 +42,7 @@ const Sidebar = () => {
                 </Button>
               </DialogTrigger>
               <DialogContent className="w-[90%] rounded-lg">
-                <DialogHeader>
-                  <DialogTitle>Faça seu Login</DialogTitle>
-                  <DialogDescription>
-                    Conecte-se usando sua conta Google.
-                  </DialogDescription>
-                </DialogHeader>
-                <Button
-                  variant="outline"
-                  className="gap-2"
-                  onClick={handleLoginWithGoogleClick}
-                >
-                  <Image
-                    src="/Google.png"
-                    width={18}
-                    height={18}
-                    alt="Fazer login com o Google"
-                  />
-                  <p className="font-bold">Google</p>
-                </Button>
+                <SignInDialog />
               </DialogContent>
             </Dialog>
           </>
