@@ -15,8 +15,16 @@ import {
 } from "./ui/sheet";
 import { Calendar } from "./ui/calendar";
 import { ptBR } from "date-fns/locale";
-import { useEffect, useState } from "react";
-import { addDays, format, set, setHours, setMinutes } from "date-fns";
+import { useEffect, useMemo, useState } from "react";
+import {
+  addDays,
+  format,
+  isPast,
+  isToday,
+  set,
+  setHours,
+  setMinutes,
+} from "date-fns";
 import { createBooking } from "../_actions/create-booking";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
@@ -53,10 +61,20 @@ const TIME_LIST = [
   "18:00",
 ];
 
-const getTimeList = (bookings: Booking[]) => {
+interface getTimeListProps {
+  bookings: Booking[];
+  selectedDate: Date;
+}
+
+const getTimeList = ({ bookings, selectedDate }: getTimeListProps) => {
   return TIME_LIST.filter((time) => {
     const hour = Number(time.split(":")[0]);
     const minutes = Number(time.split(":")[1]);
+
+    const isTimeOnThePast = isPast(set(new Date(), { hours: hour, minutes }));
+    if (isTimeOnThePast && isToday(selectedDate)) {
+      return false;
+    }
 
     const hasBookingOnCurrentTime = bookings.some(
       (booking) =>
@@ -137,6 +155,14 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     }
   };
 
+  const timeList = useMemo(() => {
+    if (!selectedDate) return [];
+    return getTimeList({
+      bookings: dayBookings,
+      selectedDate,
+    });
+  }, [dayBookings, selectedDate]);
+
   return (
     <>
       <Card className="my-3">
@@ -213,18 +239,22 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                   {selectedDate && (
                     <div className="">
                       <div className="px-5 overflow-x-auto flex p-5 gap-3 border-b border-solid">
-                        {getTimeList(dayBookings).map((time) => (
-                          <Button
-                            key={time}
-                            onClick={() => handleTimeSelect(time)}
-                            variant={
-                              selectedTime === time ? "default" : "outline"
-                            }
-                            className="rounded-lg [&::webkit-scrollbar]:hidden"
-                          >
-                            {time}
-                          </Button>
-                        ))}
+                        {timeList.length > 0 ? (
+                          timeList.map((time) => (
+                            <Button
+                              key={time}
+                              onClick={() => handleTimeSelect(time)}
+                              variant={
+                                selectedTime === time ? "default" : "outline"
+                              }
+                              className="rounded-lg [&::webkit-scrollbar]:hidden"
+                            >
+                              {time}
+                            </Button>
+                          ))
+                        ) : (
+                          <p className="text-xs">Não há horários disponíveis</p>
+                        )}
                       </div>
                       <div className="p-5">
                         <Card>
