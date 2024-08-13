@@ -47,12 +47,23 @@ export default async function Home() {
 
       <div className="px-5">
         <div className="pt-4">
-          <h2 className="text-xl font-bold">Olá {}!</h2>
-          <p className="capitalize text-sm">
-            {format(new Date(), "EEEE',' dd 'de' MMMM", {
+          <h2 className="text-xl font-bold">
+            Olá,{" "}
+            {session?.user
+              ? `${session.user.name?.split(" ")[0]}`
+              : "faça seu login"}
+          </h2>
+          <span className="capitalize text-sm">
+            {format(new Date(), "EEEE',' dd ", {
               locale: ptBR,
             })}
-          </p>
+          </span>
+          <span className="text-sm">de </span>
+          <span className="capitalize text-sm">
+            {format(new Date(), "MMMM ", {
+              locale: ptBR,
+            })}
+          </span>
         </div>
 
         <div className="flex items-center gap-3 mt-6 overflow-x-scroll [&::webkit-scrollbar]:hidden">
