@@ -17,7 +17,7 @@ export default async function Home() {
   const barbershops = await db.barbershop.findMany({});
   const popularBarbershops = await db.barbershop.findMany({
     orderBy: {
-      name: "desc",
+      imageUrl: "desc",
     },
   });
   const confirmedBookings = session?.user
